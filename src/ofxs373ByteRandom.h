@@ -101,12 +101,21 @@ struct ofxs373ByteRandom {
 		}
 
 
+		float rnd(int idx, float mn, float mx){
+			return scale(getByte(idx),mn,mx);
+		}
+
 		float rnd(float mn, float mx){
 			return scale(nxtByte(),mn,mx);
 		}
 
 		float rnd(float mx){
 			return scale(nxtByte(),0.f,mx);
+		}
+
+
+		char getByte(int idx){
+			return bytedata.at(  idx % bytedata.size()  );
 		}
 
 		char nxtByte(){
