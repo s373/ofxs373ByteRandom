@@ -12,17 +12,16 @@
 #include <string>
 #include <vector>
 
-// tornar estas funcoes estaticas
+// using these, byterng loads "data/rnd.dat"
+float byteRandom(int idx, float minimum, float maximum);
+float byteRandom(float minimum, float maximum);
+float byteRandom(float maximum);
+void byteRandomSeed(float seed);
+void byteRandomSeed(int seed);
 
-static float byteRandom(float minimum, float maximum);
-static float byteRandom(float maximum);
-static void byteRandomSeed(float seed);
-static void byteRandomSeed(int seed);
 
 struct ofxs373ByteRandom {
-
-    private:
-
+	private:
 		std::string 			bytefilename;
 		std::string 			bytedata;
 		std::ifstream      		bytebasefile;
@@ -35,11 +34,9 @@ struct ofxs373ByteRandom {
 		int						numpools,  activepool;
 		std::vector<int>		poolheads;
 
-    public:
-
+	public:
 		ofxs373ByteRandom(){}
-        ~ofxs373ByteRandom(){}
-
+		~ofxs373ByteRandom(){}
 
 		void setup(const std::string & fn, int npools=1,  int numbytes = 1){
 			if(numbytes < 1) numbytes = 1;
@@ -60,7 +57,6 @@ struct ofxs373ByteRandom {
 
 			if(!bytebasefile.is_open()){
 				std::cout << " error reading file " << bytefilename << std::endl;
-				//bytebasefile.close();
 			} else {
 				rngnumbytes = 0;
 				char c = '\0';
@@ -69,9 +65,9 @@ struct ofxs373ByteRandom {
 					bytebasefile.read((char *)&c, sizeof(char));
 					bytedata += c;
 				}
+				std::cout << "ofxs373ByteRandom read file " << bytefilename << " numbytes " << rngnumbytes << std::endl;
 			}
 			bytebasefile.close();
-			std::cout << "ofxs373ByteRandom read file " << bytefilename << " numbytes " << rngnumbytes << std::endl;
 		}
 
 
@@ -84,7 +80,6 @@ struct ofxs373ByteRandom {
 		void seed(int s) {    			//, int pool = -1){
 
 			int baseseed = s % rngnumbytes ;
-
 			if( activepool < 0 ) {
 				for(int i=0; i<poolheads.size();  i++){
 					poolheads[i] = baseseed;
@@ -162,10 +157,7 @@ struct ofxs373ByteRandom {
 		}
 
 
+		static ofxs373ByteRandom byteRng;
+		static void initByteRandom(std::string fn="data/rnd.dat");
+		static bool ofxs373BRinit;
 };
-
-
-
-
-typedef ofxs373ByteRandom byteRNG;
-static byteRNG byteRng;
